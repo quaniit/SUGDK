@@ -8,14 +8,13 @@ Originally made for use in-house by the Video Game Development Club
 
 There are two ways you can build a project using SUGDK
   1. You can use a compiled .jar version of the source or
-  2. You can fork a stable build of SUGDK to build your project around.  By doing it this way you'll already have a structured folder setup for your project that's compatible with SUGDK's data referencing.
+  2. You can create a git submodule of the repository inside the src/ folder of your project
 
 --
-### 3rd-Party Libraries
-##### Included
+### Required 3rd-Party Libraries
+
 JLayer - for Mp3 playback
 http://www.javazoom.net/javalayer/javalayer.html
-
 
 --
 
