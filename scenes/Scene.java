@@ -1,6 +1,7 @@
 package sugdk.scenes;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import sugdk.graphics.transitions.*;
 
@@ -33,6 +34,8 @@ abstract public class Scene{
      * By default we fade the screen to black
      */
     protected final Class<? extends Transition> transOut = FadeIn.class;
+    
+    protected ArrayList<SceneNode> nodeList = new ArrayList<SceneNode>();
     
 	/**
 	 * Starts the scene
@@ -108,7 +111,7 @@ abstract public class Scene{
 	 * Gets the scene's transition in effect
 	 * @return transIn
 	 */
-	public Class getTransIn()
+	public Class<? extends Transition> getTransIn()
 	{
 		return transIn;
 	}
@@ -117,8 +120,16 @@ abstract public class Scene{
 	 * Gets the scene's transition out effect
 	 * @return transOut
 	 */
-	public Class getTransOut()
+	public Class<? extends Transition> getTransOut()
 	{
 		return transOut;
+	}
+
+	/**
+	 * Adds a scene node into a Scene's Octree object management system
+	 * @param sceneNode
+	 */
+	protected void add(SceneNode sceneNode) {
+		nodeList.add(sceneNode);
 	}
 }
