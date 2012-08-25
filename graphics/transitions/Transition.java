@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import sugdk.core.GameFrame;
+import sugdk.graphics.RenderManager;
 
 /**
  * Transition
@@ -38,8 +39,8 @@ public abstract class Transition{
 	protected double timePercentage;
 	
 	//dimensions on the screen that the Transition will take up
-	protected static final int WIDTH = GameFrame.WIDTH;
-	protected static final int HEIGHT = GameFrame.HEIGHT;
+	protected int WIDTH = RenderManager.getInstance().getInternalWidth();
+	protected int HEIGHT = RenderManager.getInstance().getInternalHeight();
 	
 	/**
 	 * the buffer that will display transition to the screen on

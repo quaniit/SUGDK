@@ -2,7 +2,7 @@ package sugdk.core;
 
 //==============================================================================
 // Date Created:		19 December 2011
-// Last Updated:		1 August 2012
+// Last Updated:		19 August 2012
 //
 // File Name:			GameFrame.java
 // File Author:			M Matthew Hydock
@@ -15,25 +15,17 @@ package sugdk.core;
 //						classes to implement.
 //==============================================================================
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferStrategy;
-import java.awt.image.ImageObserver;
-
-import javax.swing.JFrame;
 
 import sugdk.engine.GameEngine;
+import sugdk.graphics.Animator;
 import sugdk.graphics.RenderManager;
 
-public abstract class GameFrame extends JFrame implements WindowListener, Runnable, KeyListener
+public abstract class GameFrame implements WindowListener, Runnable
 {
 //==============================================================================
 // Constants and regulators.
@@ -63,155 +55,54 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 	private long timeFPS = 0L;						// Accumulated time per update.
 	
 	private long pauseLength = 0;
+	
+	protected boolean renderMode = false;          // true = hardware, false = software
 //==============================================================================
 
 
 //==============================================================================
 // Game control variables.
 //==============================================================================
-	private Thread animator;						// The thread that performs the animation.
-	protected volatile boolean running = false;		// Used to stop the animation thread.
-	protected volatile boolean isPaused = false;	// Used to pause the animation thread.
+	protected volatile boolean running = false;	    // Used to stop the animation thread.
+	protected volatile boolean isPaused = false;	    // Used to pause the animation thread.
 	protected volatile boolean isSuspended = false;	// Used when the game is minimized, to
-													// stop everything, even drawing.
+													    // stop everything, even drawing.
 	
 	// Used at game termination.
 	protected volatile boolean gameOver = false;
 
 	// Information about the graphic environment.
-	private GraphicsEnvironment ge;
-	private GraphicsDevice gd;
+	public static GraphicsEnvironment ge;
+	public static GraphicsDevice gd;
 
 	// Improve support for drawing in windowed mode.
 	protected volatile boolean isWindowed;
-	protected volatile Canvas canvas;
-
-	// Double buffering support.
-	private BufferStrategy bufferStrategy;
-	private Graphics buffer;
 //==============================================================================
 	
 	protected GameEngine engine;
 	protected RenderManager display;
 	
+	protected static GameFrame instance;
+	
+	/**
+	 * Gets the single instance of the gameframe
+	 * Note: This does not create a game frame
+	 * @return
+	 */
+	public static GameFrame getInstance(){
+		return instance;
+	}
+	
 //==============================================================================
 // Initialization methods.
 //==============================================================================
-	public GameFrame(String name, int fps, boolean windowed)
-	{
-		super(name);
-
-		ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		gd = ge.getDefaultScreenDevice();
-
-//		setLayout(null);
-
-		isWindowed = windowed;
-
-		if (!isWindowed)
-		{
-			if (!gd.isFullScreenSupported())
-			// If the display doesn't support full screen, display a warning,
-			// and then start the game in windowed mode.
-			{
-				System.out.println("Full-screen exclusive mode not supported");
-				initWindowed();
-			}
-			else
-			// Otherwise, the user has requested full screen, and it is
-			// supported, so start the game in full screen mode.
-				initFullScreen();
-		}
-		else
-			initWindowed();
-		
-		setFPS(fps);
-
-		setBufferStrategy();
-
-		// Make this panel receive key events.
-		setFocusable(true);
-		requestFocus();
-	}
-	
-	private void initWindowed()
+	abstract protected void initWindowed();
 	// Set up the frame for windowed mode.
-	{
-		canvas = new Canvas();
-		add(canvas);
-		
-		//center the window in the middle of the screen
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation((int)(screenSize.getWidth()/2-this.getWidth()/2), (int)(screenSize.getHeight()/2-this.getHeight()/2));
 	
-		//setUndecorated(true);
-		addWindowListener(this);
-		setIgnoreRepaint(true);					// Turn off all paint events.
-		setResizable(false);					// Prevent frame resizing.
-		setVisible(true);
-		
-	}
-	
-	private void initFullScreen()
+	abstract protected void initFullScreen();
 	// Set up the frame to be full screen.
-	{
-		setUndecorated(true);					// No menu bar, borders, etc.
-		setIgnoreRepaint(true);					// Turn off all paint events.
-		setResizable(false);					// Prevent frame resizing.
-		
-		gd.setFullScreenWindow(this);			// Switch on full-screen exclusive mode
-	}
-	
-	private void setBufferStrategy()
-	// Attempt to set the BufferStrategy (for double buffering).
-	{
-		try
-		// Try to create a buffer strategy. Wait until it has been made.
-		{
-			EventQueue.invokeAndWait(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					if (isWindowed)
-						canvas.createBufferStrategy(2);
-					else
-						createBufferStrategy(2);
-				}
-			});
-		}
-		catch (Exception e)
-		// Whoops! Something happened and a buffer strategy couldn't be made.
-		{
-			System.out.println("Error while creating buffer strategy");
-			System.exit(0);
-		}
-		
-		try
-		// Sleep to give time for the buffer strategy to be carried out.
-		{
-			Thread.sleep(500); // 0.5 sec
-		}
-		catch(InterruptedException ex){}
 
-		if (isWindowed)
-			bufferStrategy = canvas.getBufferStrategy();
-		else
-			bufferStrategy = getBufferStrategy();
-	}
-	
-	protected void startGame()
-	// Initialize and start the thread. 
-	{ 
-		if (animator == null || !running)
-		{
-			animator = new Thread(this);
-			animator.start();
-			
-			//we also initialize the input listeners
-			addKeyListener(this);
-		}
-	}
+	abstract protected void startGame();
 //==============================================================================
 
 
@@ -279,6 +170,7 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 		beforeTime = System.nanoTime();
 
 		running = true;
+		Animator.setFrame(this);
 
 		while(running)
 		// Updating and rendering loop.
@@ -287,7 +179,8 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 			if (pauseLength == 0)
 				gameUpdate();				// Update the game data.
 			paintScreen();					// Render/Display the frame.
-
+			Animator.update();				// update the animator
+			
 			currTime	= System.nanoTime();
 			timeDiff	= currTime - beforeTime;
 			sleepTime	= period - timeDiff;
@@ -357,40 +250,14 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 			}
 		}
 		
-		// I really don't like this here, as it doesn't feel thread safe, but in
-		// the off chance the game is being run in full screen, the JFrame won't
-		// have the capability to close itself...
-		System.exit(0);
+		//simulates closing the window when the cycle is done
+		windowClosing(null);
 	}
 	
 	/**
-	 * Use active rendering to draw to a back buffer and then place the buffer on-screen.
+	 * Draws the graphics content to a buffer system
 	 */
-	public void paintScreen()
-	{
-		try
-		{
-			buffer = bufferStrategy.getDrawGraphics();
-			gameRender(buffer);
-			buffer.dispose();
-			
-			if (!bufferStrategy.contentsLost())
-				bufferStrategy.show();
-			else
-				System.out.println("Contents Lost");
-
-			// Sync the display on some systems.
-			// (on Linux, this fixes event queue problems)
-			Toolkit.getDefaultToolkit().sync();
-
-//			System.out.println("frame updated");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			running = false;
-		}
-	}
+	protected abstract void paintScreen();
 	
 	/**
 	 *  Update the game objects.
@@ -398,7 +265,7 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 	protected abstract void gameUpdate();
 	
 	/**
-	 *  Draw the game objects to a graphics context.
+	 * Draw the game objects to a graphics context.
 	 * @param g
 	 */
 	protected abstract void gameRender(Graphics g);
@@ -408,71 +275,22 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 //==============================================================================
 // Getters and setters. Some override JFrame methods, some don't.
 //==============================================================================
-	@Override
-	public void setSize(int w, int h)
-	// Set the size of the drawing area (canvas if windowed, frame if not).
-	{
-		if (isWindowed)
-		{
-			canvas.setPreferredSize(new Dimension(w,h));
-			pack();
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			this.setLocation((int)(screenSize.getWidth()/2-this.getWidth()/2), (int)(screenSize.getHeight()/2-this.getHeight()/2));
-		}
-		else
-			super.setSize(w,h);
-	}
+	abstract public void setSize(int w, int h);
 
-	public void setWidth(int w)
-	// Set the width of the drawing area (canvas if windowed, frame if not).
+	/**
+	 * Set the width of the drawing area
+	 * @param w
+	 */
+	abstract public void setWidth(int w);
 
-	{
-		if (isWindowed)
-		{
-			canvas.setPreferredSize(new Dimension(w,canvas.getHeight()));
-			pack();
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			this.setLocation((int)(screenSize.getWidth()/2-this.getWidth()/2), (int)(screenSize.getHeight()/2-this.getHeight()/2));
-		}
-		else
-			super.setSize(w,super.getHeight());
-	}
+	abstract public int getWidth();
 
-	@Override
-	public int getWidth()
-	// Get the width of the drawing area (canvas if windowed, frame if not).
-	{
-		if (isWindowed)
-			return canvas.getWidth();
+	abstract public void setHeight(int h);
 
-		return ImageObserver.WIDTH;
-	}
-
-	public void setHeight(int h)
-	// Set the height of the drawing area (canvas if windowed, frame if not).
-	{
-		if (isWindowed)
-		{
-			canvas.setPreferredSize(new Dimension(canvas.getWidth(),h));
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			this.setLocation((int)(screenSize.getWidth()/2-this.getWidth()/2), (int)(screenSize.getHeight()/2-this.getHeight()/2));
-			pack();
-		}
-		else
-		{
-			super.setSize(super.getWidth(),h);
-		}
-	}
-
-	@Override
-	public int getHeight()
-	// Get the height of the drawing area (canvas if windowed, frame if not).
-	{
-		if (isWindowed)
-			return canvas.getHeight();
-
-		return ImageObserver.HEIGHT;
-	}
+	/**
+	 * @return the height of the drawing area
+	 */
+	abstract public int getHeight();
 
 	public void setFPS(int fps)
 	{
@@ -556,4 +374,9 @@ public abstract class GameFrame extends JFrame implements WindowListener, Runnab
 		return engine;
 	}
 
+	public boolean getRenderMode()
+	{
+		return renderMode;
+	}
+	
 }

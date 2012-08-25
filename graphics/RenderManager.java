@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import sugdk.core.GameFrame;
-import sugdk.graphics.transitions.IrisIn;
-import sugdk.graphics.transitions.IrisOut;
 import sugdk.graphics.transitions.Transition;
 import sugdk.scenes.Scene;
 import sugdk.scenes.SceneManagerListener;
@@ -72,6 +70,9 @@ public class RenderManager implements SceneManagerListener{
 	private Transition trans;
 
 	private GameFrame parent;
+	
+	public static boolean HARDWARE = true;
+	public static boolean SOFTWARE = false;
 	
 	/**
 	 * Creates a new render manager
@@ -188,7 +189,7 @@ public class RenderManager implements SceneManagerListener{
 	}
 	
 	/**
-	 * Updates the buffer
+	 * Updates and AWT buffer
 	 */
 	public void render()
 	{
@@ -208,26 +209,42 @@ public class RenderManager implements SceneManagerListener{
 	}
 	
 	/**
+	 * Updates an OpenGL viewport
+	 */
+	public void renderGL()
+	{
+		
+	}
+	
+	/**
 	 * Paints the buffer to the panel
 	 */
 	public void paint(Graphics g)
 	{
-		render();
-		if (trans != null)
+		if (parent.getRenderMode())
 		{
-			trans.paint(g);
-			if (trans.isDone())
-				if (trans.getClass() == parent.getEngine().getSceneManager().getCurrentScene().getTransIn())
-					evokeTransition(false);
-				else
-				{
-					trans = null;
-					parent.pauseGame(0);
-					return;
-				}
-		}		
+			//for now, only get renderGL working, transitions can come later
+			renderGL();
+		}
 		else
-			g.drawImage(dbImage, 0, 0, parent.getWidth(), parent.getHeight(), null);
+		{
+			render();
+			if (trans != null)
+			{
+				trans.paint(g);
+				if (trans.isDone())
+					if (trans.getClass() == parent.getEngine().getSceneManager().getCurrentScene().getTransIn())
+						evokeTransition(false);
+					else
+					{
+						trans = null;
+						parent.pauseGame(0);
+						return;
+					}
+			}		
+			else
+				g.drawImage(dbImage, 0, 0, parent.getWidth(), parent.getHeight(), null);
+		}
 	}
 
 	/**

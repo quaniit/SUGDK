@@ -12,7 +12,9 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import sugdk.core.GameFrame;
 import sugdk.engine.GameEngine;
+import sugdk.scenes.SceneNode;
 
 
 /**
@@ -22,11 +24,11 @@ import sugdk.engine.GameEngine;
  *	Main class used for drawing things to screen
  *	It's like a glorified BufferedImage mixed with Component
  */
-public class Sprite{
+public class Sprite extends SceneNode{
 	
 	/**
 	 * This is the viewport that sprites will be rendering to
-	 * This should be set as soon as you create one so then if you are
+	 * This should be set as soon as you create a RenderManager so then if you are
 	 * positioning by percentages, Sprite will automatically handle it for you
 	 */
 	private static RenderManager viewport = null;
@@ -470,6 +472,27 @@ public class Sprite{
 	 * @param g
 	 */
 	public void paint(Graphics g)
+	{
+		if (GameFrame.getInstance().getRenderMode())
+			hardwareRender();
+		else
+			softwareRender(g);
+	}
+	
+	/**
+	 * Uses OpenGL to rendering the sprite
+	 */
+	private void hardwareRender() 
+	{
+		
+	}
+
+
+	/**
+	 * Paints the sprite using classic AWT Rendering
+	 * @param g
+	 */
+	public void softwareRender(Graphics g)
 	{
 		//ignore if no image or if the graphics passed is null or if the cropping area leaves a surface too small to draw
 		if (image != null && g != null && crop[3]-crop[1] > 0 && crop[2]-crop[0] > 0)
