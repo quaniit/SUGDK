@@ -1,7 +1,11 @@
 package com.shipvgdc.sugdk.graphics;
 
+import java.util.Iterator;
+
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Creates a texture region grid that can be used as a spritesheet for animations
@@ -53,6 +57,17 @@ public class SpriteSheet
 		}
 	}
 	
+	/**
+	 * Loads an animation directly from a given path
+	 * @param path - path to file
+	 * @param xFrames - number of horizontal cells in the spritesheet
+	 * @param yFrames - number of vertical cells in the spritesheet
+	 */
+	public SpriteSheet(FileHandle path, int xFrames, int yFrames)
+	{
+		this(new Texture(path), xFrames, yFrames);
+	}
+
 	/**
 	 * Pick a row of the spritesheet
 	 * @param row
