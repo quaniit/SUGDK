@@ -109,8 +109,30 @@ public class GameStateMachine<State extends GameState<? extends GameSystem>>{
 		return output;
 	}
 
+	/**
+	 * @return the ID of the current scene
+	 */
 	public int getCurrentStateID()
 	{
 		return currentStateID;
+	}
+	
+	/**
+	 * @param id
+	 * @return the state in the machine with this id
+	 */
+	public State getState(int id)
+	{
+		return stateList.get(id);
+	}
+
+	/**
+	 * Deletes states and empties the stateList, thus returning the state machine to its initial state
+	 */
+	public void clear()
+	{
+		currentState = null;
+		nextState = null;
+		stateList.clear();
 	}
 }
