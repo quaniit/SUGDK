@@ -1,11 +1,8 @@
 package com.shipvgdc.sugdk.graphics;
 
-import java.util.Iterator;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
 /**
  * Creates a texture region grid that can be used as a spritesheet for animations
@@ -14,7 +11,6 @@ import com.badlogic.gdx.utils.Array;
  */
 public class SpriteSheet
 {
-
 	TextureRegion[][] rows;
 	TextureRegion[][] columns;
 	
@@ -117,11 +113,17 @@ public class SpriteSheet
 		}
 	}
 	
+	/**
+	 * @return the width of each frame in the spritesheet
+	 */
 	public int getFrameWidth()
 	{
 		return frameSize[0];
 	}
 	
+	/**
+	 * @return the height of each frame in the spritesheet
+	 */
 	public int getFrameHeight()
 	{
 		return frameSize[1];

@@ -6,7 +6,6 @@ package com.shipvgdc.sugdk.scenes;
  * State interface for allowing scene systems to have their own statemachine to them
  * @author nhydock
  * @param <System> kind of GameSystem that the GameState belongs to
- *
  */
 public abstract class GameState<System extends GameSystem> {
 
