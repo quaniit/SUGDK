@@ -17,7 +17,7 @@ public abstract class Observable {
 	 * Serial ID identifying the observable class
 	 */
 	
-	private ArrayList<Observer<? extends Observable>> observers;
+	private ArrayList<Observer<? extends Observable>> observers = new ArrayList<Observer<? extends Observable>>();
 	
 	/**
 	 * Notifies all observers
@@ -40,12 +40,18 @@ public abstract class Observable {
 	
 	public void addObserver(Observer<? extends Observable> o)
 	{
-		observers.add(o);
+		if (o != null)
+		{
+			observers.add(o);
+		}
 	}
 	
 	public void removeObserver(Observer<? extends Observable> o)
 	{
-		observers.remove(o);
+		if (o != null)
+		{
+			observers.remove(o);
+		}
 	}
 	
 	public int observerCount()
