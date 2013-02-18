@@ -15,5 +15,5 @@ public interface Observer<T extends Observable> {
 	 * @param type - 
 	 * @param values
 	 */
-	public void update(int serial_id, Notification type, Object[] values);
+	public void update(Notification type, Object[] values);
 }

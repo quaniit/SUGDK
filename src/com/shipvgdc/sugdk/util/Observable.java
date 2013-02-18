@@ -28,15 +28,9 @@ public abstract class Observable {
 	{
 		for (int i = 0; i < observers.size(); i++)
 		{
-			observers.get(i).update(this.serial(), type, values);
+			observers.get(i).update(type, values);
 		}
 	}
-	
-	/**
-	 * Gets the class serial id
-	 * @return serial_id
-	 */
-	abstract public int serial();
 	
 	public void addObserver(Observer<? extends Observable> o)
 	{
