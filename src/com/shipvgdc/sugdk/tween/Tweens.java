@@ -1,4 +1,4 @@
-package com.shipvgdc.sugdk.ui;
+package com.shipvgdc.sugdk.tween;
 
 /**
  * List of all the different kinds of Tween Operations you can perform on the actor

@@ -1,20 +1,24 @@
-package com.shipvgdc.sugdk.ui;
+package com.shipvgdc.sugdk.tween;
 
-import static com.shipvgdc.sugdk.ui.Tweens.*;
-
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
+import static com.shipvgdc.sugdk.tween.Tweens.Color;
+import static com.shipvgdc.sugdk.tween.Tweens.Height;
+import static com.shipvgdc.sugdk.tween.Tweens.Opacity;
+import static com.shipvgdc.sugdk.tween.Tweens.Rotate;
+import static com.shipvgdc.sugdk.tween.Tweens.Scale;
+import static com.shipvgdc.sugdk.tween.Tweens.Size;
+import static com.shipvgdc.sugdk.tween.Tweens.Width;
+import static com.shipvgdc.sugdk.tween.Tweens.X;
+import static com.shipvgdc.sugdk.tween.Tweens.XY;
+import static com.shipvgdc.sugdk.tween.Tweens.Y;
 import aurelienribon.tweenengine.TweenAccessor;
 
-/**
- * @author nhydock
- *
- */
-public class TweenableSprite implements TweenAccessor<Sprite> {
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public class TweenableActor implements TweenAccessor<Actor> {
 	
 	@Override
-	public int getValues(Sprite target, int type, float[] val) {
+	public int getValues(Actor target, int type, float[] val) {
 		switch (type)
 		{
 			case X:
@@ -63,7 +67,7 @@ public class TweenableSprite implements TweenAccessor<Sprite> {
 	}
 	
 	@Override
-	public void setValues(Sprite target, int type, float[] val) {
+	public void setValues(Actor target, int type, float[] val) {
 		switch (type)
 		{
 			case X:
@@ -86,10 +90,10 @@ public class TweenableSprite implements TweenAccessor<Sprite> {
 				target.setSize(val[0], val[1]);
 				break;
 			case Width:
-				target.setSize(val[0], target.getHeight());
+				target.setWidth(val[0]);
 				break;
 			case Height:
-				target.setSize(target.getWidth(), val[0]);
+				target.setHeight(val[0]);
 				break;
 			case Scale:
 				target.setScale(val[0], val[1]);

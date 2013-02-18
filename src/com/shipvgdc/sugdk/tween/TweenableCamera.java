@@ -1,9 +1,9 @@
-package com.shipvgdc.sugdk.ui;
+package com.shipvgdc.sugdk.tween;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Quaternion;
 
-import static com.shipvgdc.sugdk.ui.Tweens.*;
+import static com.shipvgdc.sugdk.tween.Tweens.*;
 
 import aurelienribon.tweenengine.TweenAccessor;
 
