@@ -11,9 +11,8 @@ public interface Observer<T extends Observable> {
 	
 	/**
 	 * Updates properites of the observer
-	 * @param serial_id - class id of the observable object so it knows it can handle it
-	 * @param type - 
+	 * @param type
 	 * @param values
 	 */
-	public void update(Notification type, Object[] values);
+	public void notify(Notification type, Object... values);
 }

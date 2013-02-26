@@ -28,10 +28,14 @@ public abstract class Observable {
 	{
 		for (int i = 0; i < observers.size(); i++)
 		{
-			observers.get(i).update(type, values);
+			observers.get(i).notify(type, values);
 		}
 	}
 	
+	/**
+	 * Adds an observer to observe this observable
+	 * @param o
+	 */
 	public void addObserver(Observer<? extends Observable> o)
 	{
 		if (o != null)
@@ -40,6 +44,10 @@ public abstract class Observable {
 		}
 	}
 	
+	/**
+	 * Removes an observer from the observable if it's observing it
+	 * @param o
+	 */
 	public void removeObserver(Observer<? extends Observable> o)
 	{
 		if (o != null)
@@ -48,6 +56,9 @@ public abstract class Observable {
 		}
 	}
 	
+	/**
+	 * @return the amount of observers observing this observable
+	 */
 	public int observerCount()
 	{
 		return observers.size();
