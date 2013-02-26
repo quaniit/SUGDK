@@ -1,6 +1,5 @@
 package com.shipvgdc.sugdk.scenes;
 
-import com.badlogic.gdx.InputProcessor;
 import com.shipvgdc.sugdk.util.Observable;
 import com.shipvgdc.sugdk.util.Observer;
 
@@ -11,7 +10,7 @@ import com.shipvgdc.sugdk.util.Observer;
  * Useful if you want your game to follow a MVC structure.
  * @author nhydock
  */
-public abstract class GameSystem extends Observable implements Observer<GameController>{
+public abstract class GameSystem extends Observable implements Observer<GameController<? extends GameSystem, ? extends GameDisplay<?>>>{
 
 	protected GameDisplay<? extends GameSystem> display;
 	

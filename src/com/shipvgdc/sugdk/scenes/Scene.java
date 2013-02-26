@@ -16,7 +16,7 @@ import com.badlogic.gdx.Screen;
  * @param <D> A GameDisplay extended class whose system type is the same as S
  * @param <G>
  */
-public class Scene<S extends GameSystem, D extends GameDisplay<S>, G extends GameController<S>> implements Screen {
+public class Scene<S extends GameSystem, D extends GameDisplay<S>, G extends GameController<S, D>> implements Screen {
 
 	protected S system;
 	protected D display;

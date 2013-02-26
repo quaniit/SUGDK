@@ -82,11 +82,12 @@ public abstract class GameDisplay<S extends GameSystem> {
 	 * @param height - height of the viewport
 	 */
 	public abstract void resize(int width, int height);
-
-	/**
-	 * Updates the display on a specific type of notification from the system
-	 * @param notification
-	 */
-	public abstract void notify(Object notification);
 	
+	/**
+	 * @return the ui stage
+	 */
+	public Stage getUI()
+	{
+		return ui;
+	}
 }
