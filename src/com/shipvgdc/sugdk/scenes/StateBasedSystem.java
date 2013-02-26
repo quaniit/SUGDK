@@ -35,45 +35,14 @@ public abstract class StateBasedSystem<State extends GameState<? extends GameSys
 		stateMachine.handleCurrentState(delta);
 	}
 
+	/**
+	 * Notifies the active state with notfications sent to the system
+	 */
 	@Override
-	public boolean keyDown(int key) {
-		return stateMachine.getCurrentState().keyDown(key);
-	}
-	
-	@Override
-	public boolean keyTyped(char keyChar) {
-		// do nothing
-		return stateMachine.getCurrentState().keyTyped(keyChar);
-	}
-
-	@Override
-	public boolean keyUp(int key) {
-		return stateMachine.getCurrentState().keyUp(key);
-	}
-
-	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
-		return stateMachine.getCurrentState().mouseMoved(arg0, arg1);
-	}
-
-	@Override
-	public boolean scrolled(int arg0) {
-		return stateMachine.getCurrentState().scrolled(arg0);
-	}
-	
-	@Override
-	public boolean touchDown(int x, int y, int pointer, int button) {
-		return stateMachine.getCurrentState().touchDown(x, y, pointer, button);
-	}
-
-	@Override
-	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		return stateMachine.getCurrentState().touchDragged(arg0, arg1, arg2);
-	}
-
-	@Override
-	public boolean touchUp(int x, int y, int pointer, int button) {
-		return stateMachine.getCurrentState().touchUp(x, y, pointer, button);
+	public void notify(Notification type, Object... values)
+	{
+		super.notify(type, values);
+		stateMachine.getCurrentState().notify(type, values);
 	}
 	
 	/**
@@ -84,6 +53,9 @@ public abstract class StateBasedSystem<State extends GameState<? extends GameSys
 		stateMachine.clear();
 	}
 	
+	/**
+	 * @return the id of the current state
+	 */
 	public int getCurrentState()
 	{
 		return stateMachine.getCurrentStateID();

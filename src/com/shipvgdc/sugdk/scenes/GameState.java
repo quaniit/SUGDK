@@ -1,13 +1,15 @@
 package com.shipvgdc.sugdk.scenes;
 
+import com.shipvgdc.sugdk.util.Observer;
+
 /**
  * GameState
  * <p/>
  * State interface for allowing scene systems to have their own statemachine to them
  * @author nhydock
- * @param <System> kind of GameSystem that the GameState belongs to
+ * @param <S> kind of GameSystem that the GameState belongs to
  */
-public abstract class GameState<System extends GameSystem> {
+public abstract class GameState<S extends GameSystem> implements Observer<S>{
 
 	/**
 	 * ID identifier of the state
@@ -17,13 +19,13 @@ public abstract class GameState<System extends GameSystem> {
 	/**
 	 * System that the state belongs to
 	 */
-	protected System parent;
+	protected S parent;
 	
 	/**
 	 * Creates a game state
 	 * @param parent
 	 */
-	public GameState(System parent)
+	public GameState(S parent)
 	{
 		this.parent = parent;
 	}
@@ -56,100 +58,8 @@ public abstract class GameState<System extends GameSystem> {
 	 */
 	public abstract boolean end();
 	
-	/*
-	 * INPUT PROCESSING METHODS
-	 * 
-	 * Only the most commonly used ones for games are set as abstract to require definition,
-	 * else they'll just auto assume they do nothing.
-	 */
-	
 	/**
-	 * Handle input when a key is pressed down
-	 * @param key
-	 * @return
-	 */
-	public abstract boolean keyDown(int key);
-	
-	/**
-	 * Handle input when a key is released
-	 * @param key
-	 * @return
-	 */
-	public abstract boolean keyUp(int key);
-
-	/**
-	 * Handle input when a key is typed
-	 * @param keyChar
-	 * @return
-	 */
-	public boolean keyTyped(char keyChar) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	/**
-	 * Handle mouse input when the mouse moves
-	 * @param arg0
-	 * @param arg1
-	 * @return
-	 */
-	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * Handle mouse input when the scrolls a page (scroll wheel)
-	 * @param arg0
-	 * @return
-	 */
-	public boolean scrolled(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * Handle mouse input when a button is clicked
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 * @param arg3
-	 * @return
-	 */
-	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * Handle mouse input when a button is clicked down and the mouse is moved before releasing
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 * @return
-	 */
-	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * Handle mouse input when a button is released
-	 * @param x
-	 * @param y
-	 * @param pointer
-	 * @param button
-	 * @return
-	 */
-	public boolean touchUp(int x, int y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	/**
-	 * Gets the identifier for the state
-	 * @return
+	 * @return the identifier for the state
 	 */
 	public abstract int getID();
 }

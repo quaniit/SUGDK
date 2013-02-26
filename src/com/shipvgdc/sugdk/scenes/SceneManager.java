@@ -14,7 +14,7 @@ import com.badlogic.gdx.Game;
  */
 public class SceneManager {
 	
-	HashMap<Integer, Scene<?, ?>> sceneList = new HashMap<Integer, Scene<?, ?>>();
+	HashMap<Integer, Scene<?, ?, ?>> sceneList = new HashMap<Integer, Scene<?, ?, ?>>();
 	
 	Game linkedGame;
 	
@@ -34,7 +34,7 @@ public class SceneManager {
 	 * @throws Exception when id is taken
 	 * @throws NullPointerException when scene is null
 	 */
-	public void addScene(int id, Scene<?, ?> scene) throws Exception, NullPointerException
+	public void addScene(int id, Scene<?, ?, ?> scene) throws Exception, NullPointerException
 	{
 		if (!sceneList.containsKey(id))
 		{
@@ -59,7 +59,7 @@ public class SceneManager {
 	 */
 	public void setScene(int sceneID)
 	{
-		Scene<?, ?> s = sceneList.get(sceneID);
+		Scene<?, ?, ?> s = sceneList.get(sceneID);
 		if (s != null)
 		{
 			linkedGame.setScreen(s);

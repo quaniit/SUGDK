@@ -1,6 +1,8 @@
 package com.shipvgdc.sugdk.scenes;
 
 import com.badlogic.gdx.InputProcessor;
+import com.shipvgdc.sugdk.util.Observable;
+import com.shipvgdc.sugdk.util.Observer;
 
 /**
  * GameSystem
@@ -9,7 +11,7 @@ import com.badlogic.gdx.InputProcessor;
  * Useful if you want your game to follow a MVC structure.
  * @author nhydock
  */
-public abstract class GameSystem implements InputProcessor{
+public abstract class GameSystem extends Observable implements Observer<GameController>{
 
 	protected GameDisplay<? extends GameSystem> display;
 	
@@ -28,15 +30,6 @@ public abstract class GameSystem implements InputProcessor{
 	 * @param delta - amount of time passed since previous update
 	 */
 	abstract public void update(float delta);
-	
-	/**
-	 * Notify the display
-	 * @param notification to be sent to the display
-	 */
-	public void notifyDisplay(Object notification)
-	{
-		display.notify(notification);
-	}
 	
 	/**
 	 * Sets the linked display of this system

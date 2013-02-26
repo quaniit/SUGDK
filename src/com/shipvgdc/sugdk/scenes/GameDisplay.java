@@ -1,6 +1,10 @@
 package com.shipvgdc.sugdk.scenes;
 
+import aurelienribon.tweenengine.TweenManager;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 /**
  * GameDisplay
@@ -8,24 +12,42 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Abstracted away the display specifics for a game.  
  * Useful if you want your game to follow a MVC structure.
  * 
- * @param <SystemType> GameSystem that the display can examine/be linked to
+ * @param <S> GameSystem that the display can examine/be linked to
  * @author nhydock
  * 
  */
-public abstract class GameDisplay<SystemType extends GameSystem> {
+public abstract class GameDisplay<S extends GameSystem> {
 
+	/**
+	 * Has its own batch just in cas that's desired
+	 */
 	protected SpriteBatch batch;
+	
+	/**
+	 * 2D camera to draw interface components
+	 */
+	protected OrthographicCamera camera;
+
+	/**
+	 * Stage for handling 2d Components
+	 */
+	protected Stage ui;
+	
+	/**
+	 * Tween manager for the display.  All sub components should have access to it
+	 */
+	public TweenManager tweenmanager;
 	
 	/**
 	 * System the the display is to watch and update with
 	 */
-	protected SystemType system;
+	protected S system;
 	
 	/**
 	 * Creates a game scene instance
 	 * @param system
 	 */
-	public GameDisplay(SystemType system)
+	public GameDisplay(S system)
 	{
 		this.system = system;
 		this.batch = new SpriteBatch();

@@ -14,11 +14,13 @@ import com.badlogic.gdx.Screen;
  *
  * @param <S> A GameSystem extended class
  * @param <D> A GameDisplay extended class whose system type is the same as S
+ * @param <G>
  */
-public class Scene<S extends GameSystem, D extends GameDisplay<S>> implements Screen {
+public class Scene<S extends GameSystem, D extends GameDisplay<S>, G extends GameController<S>> implements Screen {
 
 	protected S system;
 	protected D display;
+	protected G controller;
 	
 	/**
 	 * Ends the display
@@ -65,8 +67,8 @@ public class Scene<S extends GameSystem, D extends GameDisplay<S>> implements Sc
 	
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		// set the current processor to be the system's input handling
+		Gdx.input.setInputProcessor(controller);	
 	}
 	
 	/**
@@ -79,7 +81,7 @@ public class Scene<S extends GameSystem, D extends GameDisplay<S>> implements Sc
 		display.init();
 		
 		// set the current processor to be the system's input handling
-		Gdx.input.setInputProcessor(system);
+		Gdx.input.setInputProcessor(controller);
 	}
 	
 }
