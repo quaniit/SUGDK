@@ -21,6 +21,15 @@ public abstract class Observable {
 	
 	/**
 	 * Notifies all observers
+	 * @param type - specific type of update to perform
+	 */
+	public void notify(Notification type)
+	{
+		notify(type, (Object)null);
+	}
+	
+	/**
+	 * Notifies all observers
 	 * @param type - specific type of update
 	 * @param values - values to pass onto the observers
 	 */
