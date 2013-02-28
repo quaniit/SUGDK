@@ -2,6 +2,7 @@ package com.shipvgdc.sugdk.scenes;
 
 import com.shipvgdc.sugdk.util.Observable;
 import com.shipvgdc.sugdk.util.Observer;
+import com.shipvgdc.sugdk.util.Observable.Notification;
 
 /**
  * GameSystem
@@ -37,5 +38,20 @@ public abstract class GameSystem extends Observable implements Observer<GameCont
 	public void setDisplay(GameDisplay<? extends GameSystem> d)
 	{
 		display = d;
+	}
+	
+	/**
+	 * Common system notifications
+	 */
+	public enum notifications implements Notification
+	{
+		/**
+		 * Change states
+		 */
+		SWITCH_STATE,
+		/**
+		 * End the scene
+		 */
+		EXIT;
 	}
 }
