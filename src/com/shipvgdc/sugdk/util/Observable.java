@@ -37,7 +37,7 @@ public abstract class Observable {
 	{
 		for (int i = 0; i < observers.size(); i++)
 		{
-			observers.get(i).notify(type, values);
+			observers.get(i).update(type, values);
 		}
 	}
 	
