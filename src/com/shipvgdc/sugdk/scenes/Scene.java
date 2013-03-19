@@ -14,13 +14,13 @@ import com.badlogic.gdx.Screen;
  *
  * @param <S> A GameSystem extended class
  * @param <D> A GameDisplay extended class whose system type is the same as S
- * @param <G>
+ * @param <C> Input controller to convert UI and Key input into command messages for the system
  */
-public class Scene<S extends GameSystem, D extends GameDisplay<S>, G extends GameController<S, D>> implements Screen {
+public class Scene<S extends GameSystem, D extends GameDisplay<S>, C extends GameController> implements Screen {
 
 	protected S system;
 	protected D display;
-	protected G controller;
+	protected C controller;
 	
 	/**
 	 * Ends the display
@@ -79,6 +79,10 @@ public class Scene<S extends GameSystem, D extends GameDisplay<S>, G extends Gam
 		// start the system and renderer
 		system.start();
 		display.init();
+		
+		//allow the system to do any first time processing that can 
+		// only be done after the display has been initialized
+		system.postStart();
 		
 		// set the current processor to be the system's input handling
 		Gdx.input.setInputProcessor(controller);

@@ -1,17 +1,20 @@
 package com.shipvgdc.sugdk.scenes;
 
 import com.badlogic.gdx.InputProcessor;
-import com.shipvgdc.sugdk.util.Observable;
+import com.shipvgdc.sugdk.util.Bridge;
+import com.shipvgdc.sugdk.util.Observer;
+
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.ControllerNotification;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.DisplayNotification;
 
 /**
  * Linking controller class that'll take display.getUI() signals from an display.getUI() processor 
  * and generates signals that the system can understand.
  * @author nhydock
  * 
- * @param <S> 
- * @param <D>
  */
-public abstract class GameController<S extends GameSystem, D extends GameDisplay<S>> extends Observable implements InputProcessor{
+public abstract class GameController extends Bridge<ControllerNotification, DisplayNotification> implements InputProcessor
+{
 
 	/**
 	 * The game controller is capable of forwarding input messages to a Display's stage, 
@@ -21,18 +24,18 @@ public abstract class GameController<S extends GameSystem, D extends GameDisplay
 	 * 
 	 * It is not required that there be a stage to forward to for this the controller to work
 	 */
-	protected D display;
+	protected GameDisplay<? extends GameSystem> display;
 	
 	/**
 	 * The parent system that the controller will send notifications to depending on input
 	 */
-	protected S system;
+	protected GameSystem system;
 	
 	/**
 	 * Sets the system the controller will send notifications to
 	 * @param system
 	 */
-	public void setSystem(S system)
+	protected void setSystem(GameSystem system)
 	{
 		this.system = system;
 	}
@@ -40,9 +43,19 @@ public abstract class GameController<S extends GameSystem, D extends GameDisplay
 	 * Sets the display that the controller will forward messages to
 	 * @param display
 	 */
-	public void setDisplay(D display)
+	protected void setDisplay(GameDisplay<? extends GameSystem> display)
 	{
 		this.display = display;
+	}
+	
+	@Override
+	public void addObserver(Observer<ControllerNotification> o)
+	{
+		super.addObserver(o);
+		if (o instanceof GameSystem)
+		{
+			setSystem((GameSystem)o);
+		}
 	}
 	
 	/*

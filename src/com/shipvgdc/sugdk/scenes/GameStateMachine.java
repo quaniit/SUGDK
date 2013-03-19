@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author nhydock
  * @param <State> Type of game state the machine will be managing
  */
-public class GameStateMachine<State extends GameState<? extends GameSystem>>{
+public class GameStateMachine<State extends GameState<?>>{
 
 	private HashMap<Integer, State> stateList = new HashMap<Integer, State>();
 	
@@ -134,5 +134,13 @@ public class GameStateMachine<State extends GameState<? extends GameSystem>>{
 		currentState = null;
 		nextState = null;
 		stateList.clear();
+	}
+	
+	/**
+	 * @return the number of registered state IDs in the machine
+	 */
+	public int getStateCount()
+	{
+		return stateList.keySet().size();
 	}
 }

@@ -1,8 +1,9 @@
 package com.shipvgdc.sugdk.scenes;
 
-import com.shipvgdc.sugdk.util.Observable;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.ControllerNotification;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.GameNotification;
+import com.shipvgdc.sugdk.util.Bridge;
 import com.shipvgdc.sugdk.util.Observer;
-import com.shipvgdc.sugdk.util.Observable.Notification;
 
 /**
  * GameSystem
@@ -10,15 +11,21 @@ import com.shipvgdc.sugdk.util.Observable.Notification;
  * Abstracted away the logic specifics for a game.  
  * Useful if you want your game to follow a MVC structure.
  * @author nhydock
+ * 
  */
-public abstract class GameSystem extends Observable implements Observer<GameController<? extends GameSystem, ? extends GameDisplay<?>>>{
+public abstract class GameSystem extends Bridge<GameNotification, ControllerNotification>
+{
 
-	protected GameDisplay<? extends GameSystem> display;
-	
 	/**
 	 * Things to do when the system is first started/the scene is switched to
 	 */
 	abstract public void start();
+	
+	/**
+	 * Allow the system to do any first time processing that can 
+	 *  only be done after the display has been initialized
+	 */
+	abstract public void postStart();
 	
 	/**
 	 * Things to do when the scene is over and the system should be shutdown
@@ -31,27 +38,13 @@ public abstract class GameSystem extends Observable implements Observer<GameCont
 	 */
 	abstract public void update(float delta);
 	
-	/**
-	 * Sets the linked display of this system
-	 * @param d
-	 */
-	public void setDisplay(GameDisplay<? extends GameSystem> d)
+	@Override
+	public void addObserver(Observer<GameNotification> o)
 	{
-		display = d;
-	}
-	
-	/**
-	 * Common system notifications
-	 */
-	public enum notifications implements Notification
-	{
-		/**
-		 * Change states
-		 */
-		SWITCH_STATE,
-		/**
-		 * End the scene
-		 */
-		EXIT;
+		super.addObserver(o);
+		if (o instanceof GameDisplay)
+		{
+			((GameDisplay<GameSystem>)o).setSystem(this);
+		}
 	}
 }

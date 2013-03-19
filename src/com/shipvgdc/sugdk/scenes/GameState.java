@@ -1,15 +1,19 @@
 package com.shipvgdc.sugdk.scenes;
 
-import com.shipvgdc.sugdk.util.Observer;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.ControllerNotification;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.GameNotification;
+import com.shipvgdc.sugdk.util.Bridge;
 
 /**
  * GameState
  * <p/>
  * State interface for allowing scene systems to have their own statemachine to them
  * @author nhydock
- * @param <S> kind of GameSystem that the GameState belongs to
+ * 
+ * @param <Sys>
  */
-public abstract class GameState<S extends GameSystem> implements Observer<S>{
+public abstract class GameState<Sys extends StateBasedSystem<?>> extends Bridge<GameNotification, ControllerNotification>
+{
 
 	/**
 	 * ID identifier of the state
@@ -19,13 +23,13 @@ public abstract class GameState<S extends GameSystem> implements Observer<S>{
 	/**
 	 * System that the state belongs to
 	 */
-	protected S parent;
+	protected Sys parent;
 	
 	/**
 	 * Creates a game state
 	 * @param parent
 	 */
-	public GameState(S parent)
+	public GameState(Sys parent)
 	{
 		this.parent = parent;
 	}
@@ -45,7 +49,10 @@ public abstract class GameState<S extends GameSystem> implements Observer<S>{
 	 * @return 
 	 *  	true if the state is done performing its start processing
 	 */
-	public abstract boolean start();
+	public boolean start()
+	{
+		return false;
+	}
 	
 	/**
 	 * Performs state setup when the state is switched away from.
@@ -56,10 +63,14 @@ public abstract class GameState<S extends GameSystem> implements Observer<S>{
 	 * @return 
 	 *  	true if the state is done performing its end processing
 	 */
-	public abstract boolean end();
+	public boolean end()
+	{
+		return false;
+	}
 	
 	/**
 	 * @return the identifier for the state
 	 */
 	public abstract int getID();
+	
 }

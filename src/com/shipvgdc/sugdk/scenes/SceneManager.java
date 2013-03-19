@@ -3,7 +3,6 @@ package com.shipvgdc.sugdk.scenes;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 
 /**
  * SceneManager

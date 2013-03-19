@@ -1,13 +1,15 @@
 package com.shipvgdc.sugdk.scenes;
 
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.ControllerNotification;
+
 /**
  * If you want to create a scene that comprises of substates, you're probably going to be using the
  * StateMachine provided and have states specific for that System.  This convenience class just packages
  * up common patterns and a premade stateMachine for you to use.
  * @author nhydock
- * @param <State> 
+ * @param <State>
  */
-public abstract class StateBasedSystem<State extends GameState<? extends GameSystem>> extends GameSystem
+public abstract class StateBasedSystem<State extends GameState<?>> extends GameSystem
 {
 	/**
 	 * Convoluted?  Yes!
@@ -18,6 +20,7 @@ public abstract class StateBasedSystem<State extends GameState<? extends GameSys
 	
 	/**
 	 * Generates the states and state machine
+	 * Be sure to initialize the statemachine and add it as an observer
 	 */
 	abstract protected void initStates();
 
@@ -34,15 +37,11 @@ public abstract class StateBasedSystem<State extends GameState<? extends GameSys
 	public void update(float delta) {
 		stateMachine.handleCurrentState(delta);
 	}
-
-	/**
-	 * Notifies the active state with notfications sent to the system
-	 */
+	
 	@Override
-	public void notify(Notification type, Object... values)
+	public void update(ControllerNotification type, Object... values)
 	{
-		super.notify(type, values);
-		stateMachine.getCurrentState().notify(type, values);
+		stateMachine.getCurrentState().update(type, values);
 	}
 	
 	/**

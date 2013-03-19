@@ -5,19 +5,27 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.DisplayNotification;
+import com.shipvgdc.sugdk.scenes.SceneNotificationTypes.GameNotification;
+
+import com.shipvgdc.sugdk.util.Bridge;
+import com.shipvgdc.sugdk.util.Observer;
 
 /**
  * GameDisplay
  * <p/>
  * Abstracted away the display specifics for a game.  
  * Useful if you want your game to follow a MVC structure.
- * 
- * @param <S> GameSystem that the display can examine/be linked to
+ *  
+ * @param <Sys>  
  * @author nhydock
  * 
  */
-public abstract class GameDisplay<S extends GameSystem> {
+public abstract class GameDisplay<Sys extends GameSystem> extends Bridge<DisplayNotification, GameNotification>
+{
 
+	protected Sys system;
+	
 	/**
 	 * Has its own batch just in cas that's desired
 	 */
@@ -39,17 +47,10 @@ public abstract class GameDisplay<S extends GameSystem> {
 	public TweenManager tweenmanager;
 	
 	/**
-	 * System the the display is to watch and update with
-	 */
-	protected S system;
-	
-	/**
 	 * Creates a game scene instance
-	 * @param system
 	 */
-	public GameDisplay(S system)
+	public GameDisplay()
 	{
-		this.system = system;
 		this.batch = new SpriteBatch();
 	}
 	
@@ -89,5 +90,20 @@ public abstract class GameDisplay<S extends GameSystem> {
 	public Stage getUI()
 	{
 		return ui;
+	}
+	
+	@Override
+	public void addObserver(Observer<DisplayNotification> o)
+	{
+		super.addObserver(o);
+		if (o instanceof GameController)
+		{
+			((GameController)o).setDisplay(this);
+		}
+	}
+	
+	protected void setSystem(Sys system)
+	{
+		this.system = system;
 	}
 }
