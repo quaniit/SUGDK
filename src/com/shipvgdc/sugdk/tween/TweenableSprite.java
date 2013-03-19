@@ -15,20 +15,25 @@ public class TweenableSprite implements TweenAccessor<Sprite> {
 	
 	@Override
 	public int getValues(Sprite target, int type, float[] val) {
+		int rLen = -1;	//number of values returned
 		switch (type)
 		{
 			case X:
 				val[0] = target.getX();
+				rLen = 1;
 				break;
 			case Y:
 				val[0] = target.getY();
+				rLen = 1;
 				break;
 			case XY:
 				val[0] = target.getX();
 				val[1] = target.getY();
+				rLen = 2;
 				break;
 			case Opacity:
 				val[0] = target.getColor().a;
+				rLen = 1;
 				break;
 			case Color:
 				Color c = target.getColor();
@@ -36,30 +41,32 @@ public class TweenableSprite implements TweenAccessor<Sprite> {
 				val[1] = c.g;
 				val[2] = c.b;
 				val[3] = c.a;
+				rLen = 4;
 				break;
 			case Width:
 				val[0] = target.getWidth();
+				rLen = 1;
 				break;
 			case Height:
 				val[0] = target.getHeight();
+				rLen = 1;
 				break;
 			case Size:
 				val[0] = target.getWidth();
 				val[1] = target.getHeight();
+				rLen = 2;
 				break;
 			case Scale:
 				val[0] = target.getScaleX();
 				val[1] = target.getScaleY();
+				rLen = 2;
 				break;
 			case Rotate:
 				val[0] = target.getRotation();
+				rLen = 1;
 				break;
-			
-			default:
-				return 0;
-			
 		}
-		return 1;
+		return rLen;
 	}
 	
 	@Override

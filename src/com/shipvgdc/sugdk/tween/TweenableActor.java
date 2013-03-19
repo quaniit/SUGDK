@@ -1,38 +1,40 @@
 package com.shipvgdc.sugdk.tween;
 
-import static com.shipvgdc.sugdk.tween.Tweens.Color;
-import static com.shipvgdc.sugdk.tween.Tweens.Height;
-import static com.shipvgdc.sugdk.tween.Tweens.Opacity;
-import static com.shipvgdc.sugdk.tween.Tweens.Rotate;
-import static com.shipvgdc.sugdk.tween.Tweens.Scale;
-import static com.shipvgdc.sugdk.tween.Tweens.Size;
-import static com.shipvgdc.sugdk.tween.Tweens.Width;
-import static com.shipvgdc.sugdk.tween.Tweens.X;
-import static com.shipvgdc.sugdk.tween.Tweens.XY;
-import static com.shipvgdc.sugdk.tween.Tweens.Y;
+import static com.shipvgdc.sugdk.tween.Tweens.*;
 import aurelienribon.tweenengine.TweenAccessor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+/**
+ * Adds Universal Tween Engine support to libGdx actors
+ * @author nhydock
+ *
+ */
 public class TweenableActor implements TweenAccessor<Actor> {
 	
 	@Override
 	public int getValues(Actor target, int type, float[] val) {
+		int returnlength = -1;
+		
 		switch (type)
 		{
 			case X:
 				val[0] = target.getX();
+				returnlength = 1;
 				break;
 			case Y:
 				val[0] = target.getY();
+				returnlength = 1;
 				break;
 			case XY:
 				val[0] = target.getX();
 				val[1] = target.getY();
+				returnlength = 2;
 				break;
 			case Opacity:
 				val[0] = target.getColor().a;
+				returnlength = 1;
 				break;
 			case Color:
 				Color c = target.getColor();
@@ -40,30 +42,33 @@ public class TweenableActor implements TweenAccessor<Actor> {
 				val[1] = c.g;
 				val[2] = c.b;
 				val[3] = c.a;
+				returnlength = 4;
 				break;
 			case Width:
 				val[0] = target.getWidth();
+				returnlength = 1;
 				break;
 			case Height:
 				val[0] = target.getHeight();
+				returnlength = 1;
 				break;
 			case Size:
 				val[0] = target.getWidth();
 				val[1] = target.getHeight();
+				returnlength = 2;
 				break;
 			case Scale:
 				val[0] = target.getScaleX();
 				val[1] = target.getScaleY();
+				returnlength = 2;
 				break;
 			case Rotate:
 				val[0] = target.getRotation();
+				returnlength = 1;
 				break;
 			
-			default:
-				return 0;
-			
 		}
-		return 1;
+		return returnlength;
 	}
 	
 	@Override
@@ -77,23 +82,31 @@ public class TweenableActor implements TweenAccessor<Actor> {
 				target.setY(val[0]);
 				break;
 			case XY:
-				target.setPosition(val[0], val[1]);
+				target.setX(val[0]);
+				target.setY(val[1]);
 				break;
 			case Opacity:
 				Color c = target.getColor();
 				target.setColor(c.r, c.g, c.b, val[0]);
 				break;
 			case Color:
-				target.setColor(val[0], val[1], val[2], val[3]);
-				break;
-			case Size:
-				target.setSize(val[0], val[1]);
+				try
+				{
+					target.setColor(val[0], val[1], val[2], target.getColor().a);
+				}
+				catch (IndexOutOfBoundsException e)
+				{
+					target.setColor(val[0], val[1], val[2], val[3]);
+				}
 				break;
 			case Width:
 				target.setWidth(val[0]);
 				break;
 			case Height:
 				target.setHeight(val[0]);
+				break;
+			case Size:
+				target.setSize(val[0], val[1]);
 				break;
 			case Scale:
 				target.setScale(val[0], val[1]);
