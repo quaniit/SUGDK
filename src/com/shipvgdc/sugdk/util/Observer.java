@@ -1,18 +1,18 @@
 package com.shipvgdc.sugdk.util;
 
-import com.shipvgdc.sugdk.util.Observable.Notification;
+import com.shipvgdc.sugdk.util.Notification;
 
 /**
  * @author nhydock
  *
- * @param <T>
+ * @param <Type> type of notifications the observer can recieve
  */
-public interface Observer<T extends Observable> {
+public interface Observer<Type extends Notification> {
 	
 	/**
 	 * Updates properites of the observer
 	 * @param type
 	 * @param values
 	 */
-	public void update(Notification type, Object... values);
+	void update(Type type, Object... values);
 }
