@@ -106,4 +106,10 @@ public abstract class GameDisplay<Sys extends GameSystem> extends Bridge<Display
 	{
 		this.system = system;
 	}
+	
+	/**
+	 * Each display may have their own way to display a message/notification bubble
+	 * By default a display has no implementation though
+	 */
+	public void showMessage(String message){}
 }
