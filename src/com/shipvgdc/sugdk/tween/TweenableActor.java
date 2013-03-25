@@ -92,11 +92,11 @@ public class TweenableActor implements TweenAccessor<Actor> {
 			case Color:
 				try
 				{
-					target.setColor(val[0], val[1], val[2], target.getColor().a);
+					target.setColor(val[0], val[1], val[2], val[3]);
 				}
 				catch (IndexOutOfBoundsException e)
 				{
-					target.setColor(val[0], val[1], val[2], val[3]);
+					target.setColor(val[0], val[1], val[2], target.getColor().a);
 				}
 				break;
 			case Width:
