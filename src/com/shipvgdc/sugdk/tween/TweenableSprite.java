@@ -62,7 +62,7 @@ public class TweenableSprite implements TweenAccessor<Sprite> {
 				rLen = 2;
 				break;
 			case Rotate:
-				val[0] = target.getRotation();
+				val[0] = 0;
 				rLen = 1;
 				break;
 			case UV:
