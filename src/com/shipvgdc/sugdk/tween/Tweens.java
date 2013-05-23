@@ -18,4 +18,7 @@ public class Tweens{
 	public static final int Size = 0x22;
 	public static final int Scale = 0x23;
 	public static final int Rotate = 0x30;
+	
+	//texture coordinates
+	public static final int UV = 0x40;
 }
