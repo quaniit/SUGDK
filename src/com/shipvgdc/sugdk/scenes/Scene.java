@@ -23,12 +23,27 @@ public class Scene<S extends GameSystem, D extends GameDisplay<S>, C extends Gam
 	protected C controller;
 	
 	/**
-	 * Ends the display
+	 * Links the components together
+	 */
+	public void link()
+	{
+		system.addObserver(display);
+		display.addObserver(controller);
+		controller.addObserver(system);
+	}
+	
+	/**
+	 * Ends the scene
 	 */
 	@Override
 	public void dispose() {
+		system.clearObservers();
+		display.clearObservers();
+		controller.clearObservers();
+		system.end();
 		display.dispose();
 	}
+	
 	/**
 	 * Ends the system
 	 */

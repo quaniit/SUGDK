@@ -25,18 +25,34 @@ public class GameStateMachine<State extends GameState<?>>{
 	/**
 	 * Adds a new state to the machine
 	 * @param newState - the state to add to the machine
+	 * @param force - forces the state to be added even if the ID is already taken
 	 * @return true if the state was added to the machine, false if it couldn't be
 	 */
-	public boolean addState(State newState)
+	public boolean addState(State newState, boolean force)
 	{
-		boolean canAdd = !stateList.containsKey(newState.getID());
+		boolean canAdd = !stateList.containsKey(newState.getID()) || force;
 		
 		if (canAdd)
 		{
 			stateList.put(newState.getID(), newState);
+			//replace current running state to this state if the id is the same
+			if (currentStateID == newState.getID())
+			{
+				this.setState(newState.getID());
+			}
 		}
 		
 		return canAdd;
+	}
+	
+	/**
+	 * Adds a new state to the machine.  By default it does not replace states with the same ID
+	 * @param newState - the state to add to the machine
+	 * @return true if the state was added to the machine, false if it couldn't be
+	 */
+	public boolean addState(State newState)
+	{
+		return addState(newState, false);
 	}
 	
 	/**
